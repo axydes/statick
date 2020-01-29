@@ -258,11 +258,11 @@ See [examples/README.md](./examples/README.md) for more details.
 
 # Statick Jenkins Integration
 
-The output of Statick can be integrated with the Jenkins Warnings plug-in.
+The output of Statick can be integrated with the Jenkins Warnings Next Generation plug-in.
 
 
   1. In Jenkins:
-     Install `Warnings Plug-In` (https://wiki.jenkins-ci.org/display/JENKINS/Warnings+Plugin)
+     Install `Warnings Next Generation Plugin` (https://wiki.jenkins.io/display/JENKINS/Warnings+Next+Generation+Plugin)
 
   1. Under `Jenkins > Manage Jenkins > Configure System`:
 
