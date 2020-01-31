@@ -3,8 +3,6 @@ from __future__ import print_function
 
 import os
 
-from six import iteritems
-
 from statick_tool.reporting_plugin import ReportingPlugin
 
 
@@ -26,6 +24,10 @@ class WriteJenkinsWarningsReportingPlugin(ReportingPlugin):
                 them.
             level: (:obj:`str`): Name of the level used in the scan.
         """
+        # Do not write report to file if no output directory is given.
+        if not self.plugin_context.args.output_directory:
+            return None, True
+
         # We _should_ be in output_dir already, but let's be safe about it.
         output_dir = os.path.join(self.plugin_context.args.output_directory,
                                   package.name + "-" + level)
@@ -41,7 +43,7 @@ class WriteJenkinsWarningsReportingPlugin(ReportingPlugin):
                                    package.name + "-" + level + ".statick")
         print("Writing output to {}".format(output_file))
         with open(output_file, "w") as out:
-            for _, value in iteritems(issues):
+            for _, value in issues.items():
                 for issue in value:
                     if issue.cert_reference:
                         line = "[{}][{}][{}:{}][{} ({})][{}]\n".format(issue.filename,

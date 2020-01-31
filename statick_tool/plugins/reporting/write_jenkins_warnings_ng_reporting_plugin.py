@@ -4,8 +4,6 @@ from __future__ import print_function
 import json
 import os
 
-from six import iteritems
-
 from statick_tool.reporting_plugin import ReportingPlugin
 
 
@@ -18,7 +16,7 @@ class WriteJenkinsWarningsNGReportingPlugin(ReportingPlugin):
 
     def report(self, package, issues, level):
         """
-        Write the results to Jenkins Warnings-NG plugin compatible output.
+        Write the results to Jenkins Warnings-NG plugin compatible file.
 
         Args:
             package (:obj:`Package`): The Package object that was analyzed.
@@ -27,6 +25,10 @@ class WriteJenkinsWarningsNGReportingPlugin(ReportingPlugin):
                 them.
             level: (:obj:`str`): Name of the level used in the scan.
         """
+        # Do not write report to file if no output directory is given.
+        if not self.plugin_context.args.output_directory:
+            return None, True
+
         # We _should_ be in output_dir already, but let's be safe about it.
         output_dir = os.path.join(self.plugin_context.args.output_directory,
                                   package.name + "-" + level)
@@ -42,7 +44,7 @@ class WriteJenkinsWarningsNGReportingPlugin(ReportingPlugin):
                                    package.name + "-" + level + ".statick")
         print("Writing output to {}".format(output_file))
         with open(output_file, "w") as out:
-            for _, value in iteritems(issues):
+            for _, value in issues.items():
                 for issue in value:
                     severity = "LOW"
                     if issue.severity > "0":
