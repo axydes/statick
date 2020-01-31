@@ -6,7 +6,6 @@ import copy
 import logging
 import os
 
-from six import iteritems
 from yapsy.PluginManager import PluginManager
 
 from statick_tool import __version__
@@ -77,7 +76,8 @@ class Statick(object):
 
     def gather_args(self, args):
         """Gather arguments."""
-        args.add_argument("output_directory", help="Output directory")
+        args.add_argument("--output-directory", dest="output_directory",
+                          type=str, help="Directory to write output files to")
         args.add_argument("--show-tool-output", dest="show_tool_output",
                           action="store_true", help="Show tool output")
         args.add_argument("--config", dest="config",
@@ -99,7 +99,7 @@ class Statick(object):
         for _, plugin in list(self.tool_plugins.items()):
             plugin.gather_args(args)
 
-        for _, plugin in iteritems(self.reporting_plugins):
+        for _, plugin in list(self.reporting_plugins.items()):
             plugin.gather_args(args)
 
     def get_level(self, path, args):
@@ -115,9 +115,9 @@ class Statick(object):
             return None
         try:
             profile = Profile(profile_resource)
-        except IOError as ex:
+        except OSError as ex:
             # This isn't quite redundant with the profile_resource check: it's possible
-            # that something else triggers an IOError, like permissions
+            # that something else triggers an OSError, like permissions
             print("Failed to access profile file {}: {}".format(profile_filename, ex))
             return None
         except ValueError as ex:
@@ -146,23 +146,24 @@ class Statick(object):
             return None, False
 
         orig_path = os.getcwd()
-        if not os.path.isdir(args.output_directory):
-            print("Output directory not found at {}!".
-                  format(args.output_directory))
-            return None, False
+        if args.output_directory:
+            if not os.path.isdir(args.output_directory):
+                print("Output directory not found at {}!".
+                      format(args.output_directory))
+                return None, False
 
-        output_dir = os.path.join(args.output_directory,
-                                  package.name + "-" + level)
+            output_dir = os.path.join(args.output_directory,
+                                      package.name + "-" + level)
 
-        if not os.path.isdir(output_dir):
-            os.mkdir(output_dir)
-        if not os.path.isdir(output_dir):
-            print("Unable to create output directory at {}!".format(
-                output_dir))
-            return None, False
-        print("Writing output to: {}".format(output_dir))
+            if not os.path.isdir(output_dir):
+                os.mkdir(output_dir)
+            if not os.path.isdir(output_dir):
+                print("Unable to create output directory at {}!".format(
+                    output_dir))
+                return None, False
+            print("Writing output to: {}".format(output_dir))
 
-        os.chdir(output_dir)
+            os.chdir(output_dir)
 
         print("------")
         print("Scanning package {} ({}) at level {}".format(package.name,

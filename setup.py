@@ -23,7 +23,7 @@ EXTRAS = {
 setup(
     author='SSC Pacific',
     name='statick',
-    description='Making code quality easier and tailored for you.',
+    description='Making code quality easier.',
     version=statick_tool.__version__,
     packages=['statick_tool'],
     package_data={'statick_tool': ['rsc/*.*', 'rsc/.clang-format',
@@ -41,7 +41,6 @@ setup(
     url='https://github.com/sscpac/statick',
     classifiers=[
         "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
-        "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",

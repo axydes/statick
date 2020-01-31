@@ -2,12 +2,10 @@ dist: xenial
 sudo: required
 language: python
 python:
-  - '2.7'
   - '3.5'
   - '3.6'
   - '3.7'
   - '3.8'
-  - 'pypy'
   - 'pypy3'
 
 cache:
@@ -35,6 +33,8 @@ script:
   - pip install tox
   # Borrowed from flask-mongoengine
   - tox -e $(echo py$TRAVIS_PYTHON_VERSION | tr -d . | sed -e 's/pypypy/pypy/' | sed -e 's/-dev//')
+  # Forces unit tests to take non-standard paths through code.
+  - cp tests/plugins/tool/clang-format_tool_plugin/different-clang-format.cfg ~/.clang-format
 
 
 jobs:
@@ -43,7 +43,7 @@ jobs:
       # the stage name) just to run statick
     - stage: test
       python: '3.5'
-      script: mkdir statick_output; ./statick . statick_output --profile self_check.yaml
+      script: ./statick . --profile self_check.yaml
       # Force this to only run for one Python version
     - stage: build
       python: '3.5'

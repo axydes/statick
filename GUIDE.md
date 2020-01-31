@@ -249,6 +249,8 @@ There is an included `clean.sh` shell script that helps with removing auto-gener
 If you write a new feature for Statick or are fixing a bug, you are strongly encouraged to add unit tests for your contribution.
 In particular, it is much easier to test whether a bug is fixed (and identify future regressions) if you can add a small unit test which replicates the bug.
 
+For tool plugins that are not available via pip it is recommended to skip tests that fail when the tool is not installed.
+
 Before submitting a change, please run tox to check that you have not introduced any regressions or violated any code style guidelines. 
 
 # Examples
@@ -258,11 +260,11 @@ See [examples/README.md](./examples/README.md) for more details.
 
 # Statick Jenkins Integration
 
-The output of Statick can be integrated with the Jenkins Warnings Next Generation plug-in.
+The output of Statick can be integrated with the Jenkins Warnings plug-in.
 
 
   1. In Jenkins:
-     Install `Warnings Next Generation Plugin` (https://wiki.jenkins.io/display/JENKINS/Warnings+Next+Generation+Plugin)
+     Install `Warnings Plug-In` (https://wiki.jenkins-ci.org/display/JENKINS/Warnings+Plugin)
 
   1. Under `Jenkins > Manage Jenkins > Configure System`:
 
